@@ -13,12 +13,11 @@ const ctx = canvas.getContext("2d");
 
 class Racket
 {
-    static WIDTH = 100;
-    static HEIGHT = 20;
-
     constructor(x=0, y=0) {
         this.x = x;
         this.y = y;
+        this.width = 100;
+        this.height = 20;
     }
 
     moveTo(x, y) {
@@ -28,7 +27,7 @@ class Racket
 
     draw() {
         ctx.beginPath();
-            ctx.rect(this.x, this.y, Racket.WIDTH, Racket.HEIGHT);
+            ctx.rect(this.x, this.y, this.width, this.height);
             ctx.fillStyle = 'red';
             ctx.lineWidth = 4;
             ctx.fill();
@@ -120,8 +119,8 @@ function collide(brick, ball) {
 function init_objects() {
     // -- Init Racket Entity
     racket = new Racket();
-    let init_x = canvas.width/2 - Racket.WIDTH/2;
-    let init_y = canvas.height - (Racket.HEIGHT+30);
+    let init_x = canvas.width/2 - racket.width/2;
+    let init_y = canvas.height - (racket.height+30);
     racket.moveTo(init_x, init_y);
 
     // -- Init Brick Entities
@@ -144,8 +143,11 @@ function init_objects() {
 }
 
 
+let key_pressed = "";
+
 function logic_game()
 {
+    // -- Collision Ball with Canvas
     if ((ball.x < (0+ball.r)) || (ball.x > (canvas.width - ball.r))) {
         ball.vx = -ball.vx;
     }
@@ -153,7 +155,7 @@ function logic_game()
         ball.vy = -ball.vy;
     }
 
-    // -- collision
+    // -- Collision Ball With Bricks 
     for (let i = 0; i < bricks.length; i++) {
         let xmin = bricks[i].x;
         let ymin = bricks[i].y;
@@ -161,8 +163,22 @@ function logic_game()
         let ymax = bricks[i].y + bricks[i].height;
         let collision = false;
 
+        // (TODO)
+
         if (collision) {
             bricks.splice(i, 1);
+        }
+    }
+
+    // -- Movement Racket. Defining Limits with Canvas
+    if (key_pressed == 'a') {
+        if (racket.x > 0) {
+            racket.moveTo(racket.x-2, racket.y);
+        }
+    }
+    if (key_pressed == 'd') {
+        if (racket.x < (canvas.width - racket.width)) {
+            racket.moveTo(racket.x+2, racket.y);
         }
     }
     ball.update();
@@ -185,7 +201,20 @@ function update_display()
 }
 
 
-// -- Main
+
+
+// -- Events
+window.onkeydown = (e) => {
+    key_pressed = e.key;
+}
+
+window.onkeyup = (e) => {
+    key_pressed = "";
+}
+
+
+
+// -- Main Program
 init_objects();
 function update()
 {
