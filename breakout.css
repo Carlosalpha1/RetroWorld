@@ -1,7 +1,29 @@
+.game {
+    width: 600px;
+    border-radius: 5%;
+    background-color: bisque;
+    border: solid;
+    border-width: 2px;
+    border-color: gray;
+}
+
 canvas {
+    position: relative;
+    left: 50px;
     background-color: lightblue;
     border-style: solid;
     border-color: black;
     border-width: 2px;
     border-radius: 10px;
+}
+
+.buttons{
+    position: relative;
+    top: 0px;
+    left: 150px;
+    margin: 20px;
+    width: 100px;
+    height: 100px;
+    border-color: gray;
+    border-radius: 50%;
 }

@@ -6,6 +6,9 @@ const BRICKS_COLS = 9;
 const BRICK_COLORS = ["green", "yellow", "red"];
 
 const canvas = document.getElementById("canvas");
+const button_left = document.getElementById("buttonA");
+const button_right = document.getElementById("buttonD");
+
 canvas.width = 500;
 canvas.height = 600;
 
@@ -203,12 +206,44 @@ function update_display()
 
 
 
-// -- Events
+// ----- Events
 window.onkeydown = (e) => {
     key_pressed = e.key;
 }
 
 window.onkeyup = (e) => {
+    key_pressed = "";
+}
+
+button_left.onmousedown = () => {
+    key_pressed = "a";
+}
+
+button_left.onmouseup = () => {
+    key_pressed = "";
+}
+
+button_left.ontouchstart = () => {
+    key_pressed = "a";
+}
+
+button_left.ontouchend = () => {
+    key_pressed = "";
+}
+
+button_right.onmousedown = () => {
+    key_pressed = "d";
+}
+
+button_right.onmouseup = () => {
+    key_pressed = "";
+}
+
+button_right.ontouchstart = () => {
+    key_pressed = "d";
+}
+
+button_right.ontouchend = () => {
     key_pressed = "";
 }
 
