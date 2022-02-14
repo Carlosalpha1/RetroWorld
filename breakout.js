@@ -5,15 +5,21 @@ const BRICKS_ROWS = 10;
 const BRICKS_COLS = 9;
 const BRICK_COLORS = ["green", "yellow", "red"];
 
+// -- HTML objects
 const canvas = document.getElementById("canvas");
 const button_left = document.getElementById("buttonA");
 const button_right = document.getElementById("buttonD");
+const bricks_cont = document.getElementById("bricks_cont");
+const title_bricks_cont = document.getElementById("title_bricks_cont");
 
+
+// -- Canvas settings
 canvas.width = 500;
 canvas.height = 600;
-
 const ctx = canvas.getContext("2d");
 
+
+// -- Racket --> Player Class
 class Racket
 {
     constructor(x=0, y=0) {
@@ -39,6 +45,8 @@ class Racket
     }
 };
 
+
+// -- Brick --> Objective Class
 class Brick
 {
     static WIDTH = 50;
@@ -48,7 +56,7 @@ class Brick
         this.x = x;
         this.y = y;
         this.width = Brick.WIDTH;
-        this.heigth = Brick.HEIGHT;
+        this.height = Brick.HEIGHT;
         this.color = color;
     }
 
@@ -68,6 +76,8 @@ class Brick
     }
 };
 
+
+// -- Ball --> Player Object Class
 class Ball
 {
     static RADIUS = 10;
@@ -76,9 +86,8 @@ class Ball
         this.x = x;
         this.y = y;
         this.r = Ball.RADIUS;
-        this.vx = 1;
-        this.vy = 1;
-        console.log(this.x, this.y)
+        this.vx = 2;
+        this.vy = 2;
     }
 
     moveTo(x, y) {
@@ -94,7 +103,6 @@ class Ball
     draw() {
         ctx.beginPath();
             ctx.arc(this.x, this.y, Ball.RADIUS, 0, 2*Math.PI);
-            //ctx.strokeStyle = 'blue';
             ctx.lineWidth = 3;
             ctx.fillStyle = 'orange';
             ctx.fill();            
@@ -104,22 +112,69 @@ class Ball
 }
 
 
-function collide(brick, ball) {
-    let xmin = brick.x;
-    let ymin = brick.y;
-    let xmax = brick.x + brick.width;
-    let ymax = brick.y + brick.height;
-    if ((ball.x + ball.r) > xmin ||
-        (ball.x - ball.r) < xmax ||
-        (ball.y + ball.r) > ymin ||
-        (ball.y - ball.r) < ymax) {
+function is_point_into_region(x, y, region)
+{
+    if ((x > region.x && x < (region.x + region.width)) &&
+        (y > region.y && y < (region.y + region.height))) {
         return true;
     }
     return false;
 }
 
 
-function init_objects() {
+function collision_ball_with_cube(ball, cube)
+{
+    let i;
+
+    for (i = (ball.x-ball.r+1); i < (ball.x+ball.r-1); i++) {
+        // ball down square side
+        if (is_point_into_region(i, ball.y+ball.r, cube)) {
+            return 1;
+        }
+        // ball up square side
+        if (is_point_into_region(i, ball.y-ball.r, cube)) {
+            return 2;
+        }
+    }
+    for (i = (ball.y-ball.r+1); i < (ball.y+ball.r-1); i++) {
+        // ball right square side
+        if (is_point_into_region(ball.x+ball.r, i, cube)) {
+            return 3;
+        }
+        // ball left square side
+        if (is_point_into_region(ball.x-ball.r, i, cube)) {
+            return 4;
+        }
+    }
+    return -1;
+}
+
+
+function collision_racket_with_ball(racket, ball)
+{
+    return collision_ball_with_cube(ball, racket);
+}
+
+
+function collision_brick_with_ball(brick, ball)
+{
+    return collision_ball_with_cube(ball, brick);
+}
+
+
+function set_ball_direction_due_to_collision(ball, type_collision)
+{
+    if (type_collision == 1 || type_collision == 2) {
+        ball.vy = -ball.vy;
+    }
+    else if (type_collision == 3 || type_collision == 4) {
+        ball.vx = -ball.vx;
+    }
+}
+
+
+function init_objects()
+{
     // -- Init Racket Entity
     racket = new Racket();
     let init_x = canvas.width/2 - racket.width/2;
@@ -136,8 +191,6 @@ function init_objects() {
                 20+i*Brick.HEIGHT,
                 BRICK_COLORS[color_index]));
         }
-        console.log(BRICK_COLORS[color_index])
-        console.log(color_index)
         color_index = (color_index + 1) % BRICK_COLORS.length;
     }
 
@@ -158,33 +211,44 @@ function logic_game()
         ball.vy = -ball.vy;
     }
 
-    // -- Collision Ball With Bricks 
+    // -- Collision Ball with the Bricks
+    let collision = 0;
     for (let i = 0; i < bricks.length; i++) {
-        let xmin = bricks[i].x;
-        let ymin = bricks[i].y;
-        let xmax = bricks[i].x + bricks[i].width;
-        let ymax = bricks[i].y + bricks[i].height;
-        let collision = false;
-
-        // (TODO)
-
-        if (collision) {
+        collision = collision_brick_with_ball(bricks[i], ball);
+        if (collision > 0) {
+            set_ball_direction_due_to_collision(ball, collision);
             bricks.splice(i, 1);
         }
+    }
+
+    // -- Collision Ball with the Racket
+    collision = collision_racket_with_ball(racket, ball)
+    if (collision > 0) {
+        set_ball_direction_due_to_collision(ball, collision);
     }
 
     // -- Movement Racket. Defining Limits with Canvas
     if (key_pressed == 'a') {
         if (racket.x > 0) {
-            racket.moveTo(racket.x-2, racket.y);
+            racket.moveTo(racket.x-4, racket.y);
         }
     }
     if (key_pressed == 'd') {
         if (racket.x < (canvas.width - racket.width)) {
-            racket.moveTo(racket.x+2, racket.y);
+            racket.moveTo(racket.x+4, racket.y);
         }
     }
+
+    // Update ball position
     ball.update();
+
+    if (bricks.length > 0) {
+        bricks_cont.innerHTML = bricks.length;
+    }
+    else {
+        title_bricks_cont.innerHTML = "WELL DONE!!";
+        title_bricks_cont.style.color = 'red';
+    }
 }
 
 
@@ -202,8 +266,6 @@ function update_display()
     }
     ball.draw();
 }
-
-
 
 
 // ----- Events
@@ -246,7 +308,6 @@ button_right.ontouchstart = () => {
 button_right.ontouchend = () => {
     key_pressed = "";
 }
-
 
 
 // -- Main Program
