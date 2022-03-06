@@ -1,0 +1,107 @@
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,700,800,300);
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, sans-serif;
+    line-height: 1.45;
+    background: white;
+}
+
+header {
+    color: #FFFFFF;
+    background-color: #b89537;
+    padding: 40px 0;
+    text-align: center;
+}
+
+menu {
+    text-align: center;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 0 20px 0 20px;
+    max-width: 900px;
+}
+
+#Title {
+    font-size: 48px;
+    margin: 0;
+}
+
+article {
+    margin: 0 auto;
+    background-color: #b89537;
+    padding: 2.5% 2.5%;
+}
+
+.game_link {
+    color: black;
+    text-decoration: none;
+}
+
+section {
+    display: inline-block;
+    position: relative;
+    margin: 0px 15px;
+    padding: 2px 0px;
+    max-width: 300px;
+    max-height: 800px;
+    border: solid;
+    border-radius: 40px;
+    align-items: center;
+    text-align: center;
+    background-color: #e9e2c3;
+}
+
+section:hover {
+    background-color: #a09a80;
+    /*box-shadow: 17px 6px 43px 10px #000;*/
+    cursor: pointer;
+}
+
+section h2 {
+    font-variant: small-caps;
+}
+
+section img {
+    width: 250px;
+    height: 300px;
+    padding: 5px 5px 5px 5px;
+    opacity: 80%;
+}
+
+section p {
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+}
+
+footer {
+    background: #353535;
+    padding: 32px 0;
+    text-align: center;
+    color: #868686;
+    font-size: 12px;
+}
+
+footer ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+footer li {
+    display: inline-block;
+}
+
+footer li a {
+    padding: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #c3c3c3;
+}
+
+footer li a:hover {
+    color: white;
+}

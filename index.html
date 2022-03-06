@@ -4,21 +4,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="breakout.js" defer></script>
-    <link rel="stylesheet" href="breakout.css">
-    <title>Breakout</title>
+    <link rel="stylesheet" href="main.css">
+    <title>RetroWorld</title>
 </head>
 <body>
-    <div class="game">
-        <br>
-        <h2 align="center">BREAKOUT</h2>
-        <hr>
-        <h4 align="center" id="title_bricks_cont"> Remaining Blocks: <span id="bricks_cont"></span></h4>
-        <canvas id="canvas"></canvas>
-        <div class="buttons_row">
-            <button class="buttons" type="button" id="buttonA">A</button>
-            <button class="buttons" type="button" id="buttonD">D</button>
+    <header>
+        <div class="container">
+            <h1 id="Title">Retro World</h1>
+            <h3>a collection of classic games</h3>
         </div>
-    </div>
+    </header>
+
+    <menu>
+        Menu
+    </menu>
+    
+    <article>
+
+        <!-- Section Structure
+            * link
+                - title
+                - img
+                - black line
+                - description
+        -->
+
+        <!-- Breakout -->
+        <section>
+            <a class="game_link" href="games/breakout/index.html">
+                <h2 class="game_title">Breakout</h2>
+                <img src="images/breakout_demo.gif" alt="Breakout Image">
+                <hr/>
+                <p class="game_description">A racket will have to use a ball to break all the bricks on the stage</p>
+            </a>
+        </section>
+
+        <section>
+            <a class="game_link" href="games/breakout/index.html">
+                <h2 class="game_title">Breakout</h2>
+                <img src="images/breakout_demo.gif" alt="Breakout Image">
+                <hr/>
+                <p class="game_description">A racket will have to use a ball to break all the bricks on the stage</p>
+            </a>
+        </section>
+
+
+    </article>
+    <footer>
+        <div class="container">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contacts</a></li>
+            </ul>
+            <p>Free Software (Carlosalpha1)</p>
+        </div>
+    </footer>
+    
 </body>
 </html>
